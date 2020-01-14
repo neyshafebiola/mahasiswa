@@ -1,0 +1,101 @@
+/*
+
+* Override Pages default styles or create your own styles here
+
+*/
+
+.form-control:focus {
+background-color: #f4fbff;
+}
+.select2-results .select2-results__option--highlighted{
+background-color: #f4fbff !important;
+border-radius: 3px;
+color: #626262 !important;
+}
+
+.select2-container--open .select2-selection {
+background-color: #f4fbff;
+}
+
+.form-group-default.required:after{
+	content: none;
+}
+
+label span {
+	color: #f55753;
+	font-size: 1rem;
+	font-family: arial;
+	padding-left: : 20px;
+
+}
+ /*body{margin:40px;}*/
+
+.stepwizard-step p {
+    margin-top: 10px;    
+}
+
+.stepwizard-row {
+    display: table-row;
+}
+
+.stepwizard {
+    display: table;     
+    width: 100%;
+    position: relative;
+}
+
+.stepwizard-step button[disabled] {
+    opacity: 1 !important;
+    filter: alpha(opacity=100) !important;
+}
+
+.stepwizard-row:before {
+    top: 14px;
+    bottom: 0;
+    position: absolute;
+    content: " ";
+    width: 78%;
+    height: 1px;
+    background-color: #ccc;
+    z-order: 0;
+    left: 70px;
+    
+}
+
+.stepwizard-step {    
+    display: table-cell;
+    text-align: center;
+    position: relative;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+}
+.bulet{
+    border-radius: 50%;
+    height: 30px;
+
+}
+
+.nav-tabs li a.active {
+  color: #48b0f7;
+}
+
+.nav-tabs li a.active:hover {
+  color: #48b0f7;
+}
+
+
+.nav-tabs li a.active:focus {
+  color: #48b0f7;
+}
+
+.nav-tabs {
+  padding: 0 2%;
+}
