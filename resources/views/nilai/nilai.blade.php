@@ -8,6 +8,16 @@
   tfoot {
       display: table-header-group;
   }
+
+ .form-group-default.required label:after {
+    color: #f55753;
+    content: "*";
+    font-family: arial;
+    font-size: 20px;
+    position: absolute;
+    right: 12px;
+    top: 6px;
+   } 
 </style>
 @endpush
 @section('content')
@@ -25,11 +35,11 @@
                 </div>
                 <div class="modal-body">
                   <p class="small-text">Masukkan data nilai mahasiswa</p>
-                  <form action="{{ url('/nilai/create') }}" method="post">
+                  <form action="{{ url('/nilai/create') }}" method="post" id="form_nilai">
                     {{csrf_field()}}
                      <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Nama Mahasiswa</label>
                           <select class="form-control" name="nama_mahasiswa">
                             <option value=""> Pilih Mahasiswa </option>
@@ -42,7 +52,7 @@
                     </div>
                     <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Nama Dosen</label>
                          <select class="form-control" name="nama_dosen">
                             <option value=""> Pilih Dosen </option>
@@ -55,7 +65,7 @@
                   </div>
                      <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Mata Kuliah</label>
                            <select class="form-control" name="nama_matakuliah">
                             <option value=""> Pilih Mata Kuliah </option>
@@ -68,14 +78,14 @@
                     </div>
                     <div class="row">
                       <div class="col-sm-6">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Nilai</label>
                           <input name="nilai" type="text" class="form-control" placeholder="Masukkan nilai" onkeyup="getMutu(this.value)">
                         </div>
                       </div>
 
                       <div class="col-sm-6">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default ">
                           <label>Mutu</label>
                           <input name="mutu" type="text" class="form-control"  readonly="">
                         </div>
@@ -147,10 +157,10 @@
                 
                     @foreach($data_nilai as $nilai)
                     <tr>
-                      <td>{{$nilai->mahasiswa->nim}}</td>
-                      <td>{{$nilai->mahasiswa->nama_depan}} {{$nilai->mahasiswa->nama_belakang}}</td>
-                      <td>{{$nilai->dosen->nip}}</td>
-                      <td>{{$nilai->dosen->nama_dosen}}</td>
+                      <td>{{ $nilai->mahasiswa ? $nilai->mahasiswa->nim : '-' }}</td>
+                      <td>{{ $nilai->mahasiswa ? $nilai->mahasiswa->nama_depan : '-'}} {{$nilai->mahasiswa ? $nilai->mahasiswa->nama_belakang : '-'}}</td>
+                      <td>{{$nilai->dosen ? $nilai->dosen->nip : '-'}}</td>
+                      <td>{{$nilai->dosen ? $nilai->dosen->nama_dosen : '-'}}</td>
                       <td>{{$nilai->matakuliah->matakuliah}}</td>
                       <td>{{$nilai->nilai}}</td>
                       <td>{{$nilai->mutu}}</td>
@@ -179,7 +189,7 @@
     <script type="text/javascript" src="{{asset('template/assets/plugins/datatables-responsive/js/datatables.responsive.js')}}"></script>
     <script type="text/javascript" src="{{asset('template/assets/plugins/datatables-responsive/js/lodash.min.js')}}"></script>
     <script src="{{asset('template/assets/js/datatables.js')}}" type="text/javascript"></script>
-
+    <script src="{{asset('template/assets/plugins/jquery-validation/js/jquery.validate.min.js')}}" type="text/javascript"></script>
     <script type="text/javascript">
 
       $(document).ready(function() {
@@ -204,6 +214,27 @@
                   }
               } );
           } );
+
+           $("#form_nilai").validate({
+           
+            rules: {
+              nama_mahasiswa: "required",
+              nama_dosen : "required",
+              nama_matakuliah : "required",
+              nilai : "required",
+            },
+            messages: {
+              nama_mahasiswa: "Please select college student name",
+              nama_dosen : "Please select lecturer name",
+              nama_matakuliah : "Please select course ",
+              nilai : "Please enter the score",
+            },
+          });
+
+          $('input[name="nilai"]').on('keypress', function(e){
+            return (e.which !=8 && e.which !=0 && (e.which < 48 || e.which >57) && e.which !=46) ? false : true;
+          }); //js for number only 
+
       } );
 
       function getMutu($val){
@@ -248,6 +279,8 @@
 
         $('[name="mutu"]').val(mutu);
       }
+
+
 
     </script>
 @endpush

@@ -51,6 +51,18 @@ class DosenController extends Controller
         $dosen = Dosen::find($id);
         $dosen->delete($dosen);
         return redirect('/dosen')->with('Sukses','Data Berhasil Dihapus');
+    }
+
+     public function nipunique(Request $request)
+    {
+        $nip_unique = $request->input('nip');
+        $check = Dosen::where('nip', $nip_unique)->count();
+
+        if ($check > 0) {
+            echo 'false';
+        } else {
+            echo 'true';
+        }
     }    
 
 

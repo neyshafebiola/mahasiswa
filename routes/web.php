@@ -25,6 +25,7 @@ Route::post('/dosen/create','DosenController@create')->name('dosen.create');
 Route::get('/dosen/{id}/edit','DosenController@edit')->name('dosen.edit');
 Route::post('/dosen/{id}/update','DosenController@update')->name('dosen.update');
 Route::get('/dosen/{id}/delete','DosenController@delete')->name('dosen.delete');
+Route::get('/dosen/nip-unique','DosenController@nipunique')->name('dosen.nip');
 
 //mahasiswa
 Route::get('/mahasiswa', 'MahasiswaController@index')->name('mahasiswa.index');
@@ -32,6 +33,8 @@ Route::post('/mahasiswa/create','MahasiswaController@create')->name('mahasiswa.c
 Route::get('/mahasiswa/{id}/edit','MahasiswaController@edit')->name('mahasiswa.edit');
 Route::post('/mahasiswa/{id}/update','MahasiswaController@update')->name('mahasiswa.update');
 Route::get('/mahasiswa/{id}/delete','MahasiswaController@delete')->name('mahasiswa.delete');
+Route::get('/mahasiswa/email-unique','MahasiswaController@emailunique')->name('mahasiswa.email');
+Route::get('/mahasiswa/nim-unique','MahasiswaController@nimunique')->name('mahasiswa.nim');
 
 //mata kuliah
 Route::get('/matakuliah', 'MatakuliahController@index')->name('matakuliah.index');
@@ -39,6 +42,8 @@ Route::post('/matakuliah/create','MatakuliahController@create')->name('matakulia
 Route::get('/matakuliah/{id}/edit','MatakuliahController@edit')->name('matakuliah.edit');
 Route::post('/matakuliah/{id}/update','MatakuliahController@update')->name('matakuliah.update');
 Route::get('/matakuliah/{id}/delete','MatakuliahController@delete')->name('matakuliah.delete');
+Route::get('/matakuliah/kode-unique','MatakuliahController@kodeunique')->name('matakuliah.kode');
+Route::get('/matakuliah/mk-unique','MatakuliahController@mkunique')->name('matakuliah.mk');
 
 //nilai
 Route::get('/nilai', 'NilaiController@index')->name('nilai.index');

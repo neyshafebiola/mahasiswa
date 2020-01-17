@@ -64,5 +64,29 @@ class MahasiswaController extends Controller
         $mahasiswa = Mahasiswa::find($id);
         $mahasiswa->delete($mahasiswa);
         return redirect('/mahasiswa')->with('Sukses','Data Berhasil Dihapus');
-    }    
+    } 
+
+    public function emailunique(Request $request)
+    {
+        $email_unique = $request->input('email');
+        $check = Mahasiswa::where('email', $email_unique)->count();
+
+        if ($check > 0) {
+            echo 'false';
+        } else {
+            echo 'true';
+        }
+    }   
+
+    public function nimunique(Request $request)
+    {
+        $nim_unique = $request->input('nim');
+        $check = Mahasiswa::where('nim', $nim_unique)->count();
+
+        if ($check > 0) {
+            echo 'false';
+        } else {
+            echo 'true';
+        }
+    }   
 }

@@ -8,6 +8,15 @@
   tfoot {
       display: table-header-group;
   }
+   .form-group-default.required label:after {
+    color: #f55753;
+    content: "*";
+    font-family: arial;
+    font-size: 20px;
+    position: absolute;
+    right: 12px;
+    top: 6px;
+   } 
 </style>
 @endpush
 @section('content')
@@ -25,30 +34,30 @@
                 </div>
                 <div class="modal-body">
                   <p class="small-text">Masukkan data mata kuliah baru</p>
-                  <form action="{{ url('/matakuliah/create') }}" method="post">
+                  <form action="{{ url('/matakuliah/create') }}" method="post" id="form_matakuliah">
                     {{csrf_field()}}
                     <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Kode</label>
-                          <input name="kode" type="text" class="form-control" placeholder="Masukkan kode mata kuliah">
+                          <input name="kode" type="text" class="form-control" placeholder="Masukkan kode mata kuliah " autocomplete="off">
                         </div>
                       </div>
                     </div>
                      <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Mata Kuliah</label>
-                          <input name="matakuliah" type="text" class="form-control" placeholder="Masukkan nama mata kuliah">
+                          <input name="matakuliah" type="text" class="form-control" placeholder="Masukkan nama mata kuliah" autocomplete="off">
                         </div>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-sm-6">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>SKS</label>
-                          <input name="sks" type="text" class="form-control" placeholder="Masukkan SKS">
+                          <input name="sks" type="text" class="form-control" placeholder="Masukkan SKS" autocomplete="off">
                         </div>
                       </div>
                     </div>
@@ -128,6 +137,7 @@
     <script type="text/javascript" src="{{asset('template/assets/plugins/datatables-responsive/js/datatables.responsive.js')}}"></script>
     <script type="text/javascript" src="{{asset('template/assets/plugins/datatables-responsive/js/lodash.min.js')}}"></script>
     <script src="{{asset('template/assets/js/datatables.js')}}" type="text/javascript"></script>
+    <script src="{{asset('template/assets/plugins/jquery-validation/js/jquery.validate.min.js')}}" type="text/javascript"></script>
 
     <script type="text/javascript">
 
@@ -153,6 +163,51 @@
                   }
               } );
           } );
+
+
+          $('input[name="sks"]').on('keypress', function(e){
+            return (e.which !=8 && e.which !=0 && (e.which < 48 || e.which >57) && e.which !=46) ? false : true;
+          }); //js for number only 
+  
+        $("#form_matakuliah").validate({
+           
+            rules: {
+              kode: 
+              {
+                required : true,
+                remote   :
+                  {
+                    url  : "{{url('/matakuliah/kode-unique')}}",
+                    type : "get"
+                  }  
+              },
+              
+              matakuliah :
+                  {
+                    required : true,
+                    remote   :
+                      {
+                        url  : "{{url('/matakuliah/mk-unique')}}",
+                        type : "get"
+                      }
+                  },
+              sks : "required",
+            },
+            messages: {
+              kode:
+              {
+
+                 required : "Please enter the course code",
+                 remote   : "Kode sudah terdaftar"
+              },
+              matakuliah : 
+                {
+                  required : "Please enter the course name",
+                  remote   : "Nama mata kuliah sudah tersedia"
+                },
+              sks : "Please enter SKS",
+            },
+          });  
       } );
 
     </script>

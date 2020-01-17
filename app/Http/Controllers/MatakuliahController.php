@@ -49,6 +49,30 @@ class MatakuliahController extends Controller
         $matakuliah = Matakuliah::find($id);
         $matakuliah->delete($matakuliah);
         return redirect('/matakuliah')->with('Sukses','Data Berhasil Dihapus');
-    }    
+    } 
+
+    public function kodeunique(Request $request)
+    {
+        $kode_unique = $request->input('kode');
+        $check = Matakuliah::where('kode', $kode_unique)->count();
+
+        if ($check > 0) {
+            echo 'false';
+        } else {
+            echo 'true';
+        }
+    }
+
+    public function mkunique(Request $request)
+    {
+        $mk_unique = $request->input('matakuliah');
+        $check = Matakuliah::where('matakuliah', $mk_unique)->count();
+
+        if ($check > 0) {
+            echo 'false';
+        } else {
+            echo 'true';
+        }
+    }      
       
 }

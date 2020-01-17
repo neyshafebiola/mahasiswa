@@ -8,6 +8,16 @@
   tfoot {
       display: table-header-group;
   }
+
+ .form-group-default.required label:after {
+    color: #f55753;
+    content: "*";
+    font-family: arial;
+    font-size: 20px;
+    position: absolute;
+    right: 12px;
+    top: 6px;
+   } 
 </style>
 @endpush
 @section('content')
@@ -31,27 +41,27 @@
                 <div class="modal-body">
                   <p class="small-text">Masukkan mahasiswa baru</p>
                   
-                  <form action="{{ url('/mahasiswa/create') }}" method="post">
+                  <form action="{{ url('/mahasiswa/create') }}" method="post" id="form_mahasiswa">
                   {{csrf_field()}}
                     <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>NIM</label>
-                          <input name="nim" type="text" class="form-control" placeholder="Masukkan NIM">
+                          <input name="nim" type="text" class="form-control" placeholder="Masukkan NIM" autocomplete="off">
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>E-mail</label>
-                          <input name="email" type="text" class="form-control" placeholder="Masukkan E-mail">
+                          <input name="email" type="email" class="form-control" placeholder="Masukkan E-mail" autocomplete="off">
                         </div>
                       </div>
                     </div>
                      <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Nama Depan</label>
                           <input name="nama_depan" type="text" class="form-control" placeholder="Masukkan nama depan mahasiswa">
                         </div>
@@ -59,7 +69,7 @@
                     </div>
                       <div class="row">
                        <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Nama Belakang</label>
                           <input name="nama_belakang" type="text" class="form-control" placeholder="Masukkan nama belakang mahasiswa">
                         </div>
@@ -67,7 +77,7 @@
                     </div>
                      <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Jurusan</label>
                           <input name="jurusan" type="text" class="form-control" placeholder="Masukkan jurusan">
                         </div>
@@ -75,21 +85,23 @@
                     </div>
                      <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Jenis Kelamin</label>
                           <input type="radio" name="jenis_kelamin" value="L"> Laki-laki<br>
                           <input type="radio" name="jenis_kelamin" value="P"> Perempuan<br>
+                          <label id="jenis_kelamin-error" class="error" for="jenis_kelamin"></label>
                         </div>
                       </div>
                     </div>
                      <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Alamat</label>
                           <textarea name="alamat" class="form-control" rows="4" cols="50" placeholder="Masukkan alamat"></textarea>  
                         </div>
                       </div>
                     </div>
+                    <div class="clearfix"></div>
                     <div class="modal-footer">
                       <button id="add-app" type="submit" class="btn btn-primary  btn-cons">Add</button>
                       <button type="button" class="btn btn-cons" data-dismiss="modal">Close</button>
@@ -190,7 +202,7 @@
     <script type="text/javascript" src="{{asset('template/assets/plugins/datatables-responsive/js/datatables.responsive.js')}}"></script>
     <script type="text/javascript" src="{{asset('template/assets/plugins/datatables-responsive/js/lodash.min.js')}}"></script>
     <script src="{{asset('template/assets/js/datatables.js')}}" type="text/javascript"></script>
-
+    <script src="{{asset('template/assets/plugins/jquery-validation/js/jquery.validate.min.js')}}" type="text/javascript"></script>
     <script type="text/javascript">
 
       $(document).ready(function() {
@@ -214,6 +226,54 @@
                           .draw();
                   }
               });
+          });
+
+          $("#form_mahasiswa").validate({
+           
+            rules: 
+            {
+              nama_depan: "required",
+              nama_belakang : "required",
+              nim :
+              {
+                required:true,
+                remote  :
+                {
+                  url  : "{{url('/mahasiswa/nim-unique')}}",
+                  type : "get"
+                }
+              }, 
+              alamat : "required",
+              jurusan : "required",
+              jenis_kelamin : "required" ,
+              email : 
+              {
+                email : true,
+                required : true,
+                remote : 
+                  {
+                    url: "{{url('/mahasiswa/email-unique')}}",
+                    type : "get"
+                  }
+              }
+             
+            },
+            messages: {
+              nama_depan: "Please enter your first name",
+              nama_belakang : "Please enter your last name",
+              nim : {
+                      required : "Please enter your NIM",
+                      remote   : "NIM tersebut sudah tersedia"
+                    }, 
+                      
+              alamat : "Please enter your address",
+              jurusan : "Please enter your major",
+              email: {
+                      required: "We need your email address to contact you",
+                      email: "Your email address must be in the format of name@domain.com",
+                      remote  : "Alamat email sudah tersedia" 
+                     }  
+            },
           });
       });
 

@@ -8,6 +8,15 @@
   tfoot {
       display: table-header-group;
   }
+   .form-group-default.required label:after {
+    color: #f55753;
+    content: "*";
+    font-family: arial;
+    font-size: 20px;
+    position: absolute;
+    right: 12px;
+    top: 6px;
+   }
 </style>
 @endpush
 @section('content')
@@ -26,27 +35,27 @@
                 <div class="modal-body">
                   <p class="small-text">Masukkan dosen baru</p>
                   
-                  <form action="{{ url('/dosen/create') }}" method="post">
+                  <form action="{{ url('/dosen/create') }}" method="post" id="form_dosen">
                   {{csrf_field()}}
                     <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>NIP</label>
-                          <input name="nip" type="text" class="form-control" placeholder="Masukkan NIP">
+                          <input name="nip" type="text" class="form-control" placeholder="Masukkan NIP" autocomplete="off">
                         </div>
                       </div>
                     </div>
                      <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Nama Dosen</label>
-                          <input name="nama_dosen" type="text" class="form-control" placeholder="Masukkan nama dosen">
+                          <input name="nama_dosen" type="text" class="form-control" placeholder="Masukkan nama dosen" autocomplete="off">
                         </div>
                       </div>
                     </div>
                      <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Jenis Kelamin</label>
                           <input type="radio" name="jenis_kelamin" value="L"> Laki-laki<br>
                           <input type="radio" name="jenis_kelamin" value="P"> Perempuan<br>
@@ -55,9 +64,9 @@
                     </div>
                      <div class="row">
                       <div class="col-sm-12">
-                        <div class="form-group form-group-default">
+                        <div class="form-group form-group-default required">
                           <label>Alamat</label>
-                          <textarea name="alamat" class="form-control" rows="4" cols="50" placeholder="Masukkan alamat"></textarea>  
+                          <textarea name="alamat" class="form-control" rows="4" cols="50" placeholder="Masukkan alamat" autocomplete="off"></textarea>  
                         </div>
                       </div>
                     </div>
@@ -150,7 +159,7 @@
     <script type="text/javascript" src="{{asset('template/assets/plugins/datatables-responsive/js/datatables.responsive.js')}}"></script>
     <script type="text/javascript" src="{{asset('template/assets/plugins/datatables-responsive/js/lodash.min.js')}}"></script>
     <script src="{{asset('template/assets/js/datatables.js')}}" type="text/javascript"></script>
-
+    <script src="{{asset('template/assets/plugins/jquery-validation/js/jquery.validate.min.js')}}" type="text/javascript"></script>
     <script type="text/javascript">
 
       $(document).ready(function() {
@@ -175,6 +184,33 @@
                   }
               } );
           } );
+
+          $("#form_dosen").validate({
+           
+            rules: {
+              nama_dosen: "required",
+              jenis_kelamin : "required",
+              nip : 
+                {
+                  required: true,
+                  remote  :
+                    {
+                      url: "{{url('/dosen/nip-unique')}}",
+                      type : "get"
+                    }
+                },
+              alamat : "required",
+            },
+            messages: {
+              nama_dosen: "Please enter your name",
+              nip : 
+                { 
+                  required :"Please enter your NIP",
+                  remote   :"NIP tersebut sudah tersedia"
+                },
+              alamat : "Please enter your address",
+            },
+          });
       } );
 
     </script>
